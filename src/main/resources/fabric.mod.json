@@ -4,25 +4,24 @@
   "version": "${version}",
 
   "name": "${name}",
-  "description": "Template for my fabric mods",
+  "description": "Removes the 210° view limit in boats, allowing full 360° camera rotation.",
   "authors": [
-    "Fallen_Breath"
+    "As_One"
   ],
   "contact": {
-    "homepage": "https://modrinth.com",
-    "sources": "https://github.com/Fallen-Breath/fabric-mod-template"
+    "homepage": "https://modrinth.com/BoatView360",
+    "issues": "https://github.com/AsOne2020/BoatView360/issues",
+    "sources": "https://github.com/AsOne2020/BoatView360"
   },
+  "license": "LGPLv3",
 
-  "icon": "assets/template_mod/icon.png",
+  "icon": "assets/boatview360/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
-      "me.fallenbreath.template_mod.TemplateMod"
-    ]
   },
   "mixins": [
-    "template_mod.mixins.json"
+    "boatview360.mixins.json"
   ],
 
   "depends": {

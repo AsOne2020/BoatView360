@@ -1,12 +1,12 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "me.fallenbreath.template_mod.mixins",
+  "package": "me.asone.boatview360.mixins",
+  "plugin": "me.asone.boatview360.MixinConfigPlugin",
   "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
-  "mixins": [
-    "MinecraftServerMixin"
-  ],
   "client": [
+    "MixinBoatEntity",
+    "MixinAbstractBoatEntity"
   ],
   "injectors": {
     "defaultRequire": 1

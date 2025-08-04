@@ -35,12 +35,12 @@ dependencies {
 
 	// dependencies
 //	include(modImplementation(fabricApi.module("fabric-resource-loader-v0", project.fabric_api_version)))
-//	include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
+	include(modImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 //	include(annotationProcessor(implementation("io.github.llamalad7:mixinextras-fabric:${project.mixinextras_version}")))
 }
 
-String MIXIN_CONFIG_PATH = 'template_mod.mixins.json'
-String LANG_DIR = 'assets/template_mod/lang'
+String MIXIN_CONFIG_PATH = 'boatview360.mixins.json'
+String LANG_DIR = 'assets/boatview360/lang'
 JavaVersion JAVA_COMPATIBILITY
 if (mcVersion >= 12005) {
 	JAVA_COMPATIBILITY = JavaVersion.VERSION_21
@@ -96,13 +96,13 @@ String fullProjectVersion, fullArtifactVersion
 group = project.maven_group
 if (System.getenv("JITPACK") == "true") {
 	// move mc version into archivesBaseName, so jitpack will be able to organize archives from multiple subprojects correctly
-	base.archivesName = project.archives_base_name + '-mc' + project.minecraft_version
+	base.archivesName = project.archives_base_name + '-mc' + project.archive_mc_version
 	fullProjectVersion = 'v' + project.mod_version + modVersionSuffix
 	fullArtifactVersion = artifactVersion + artifactVersionSuffix
 } else {
 	base.archivesName = project.archives_base_name
-	fullProjectVersion = 'v' + project.mod_version + '-mc' + project.minecraft_version + modVersionSuffix
-	fullArtifactVersion = artifactVersion + '-mc' + project.minecraft_version + artifactVersionSuffix
+	fullProjectVersion = 'v' + project.mod_version + '-mc' + project.archive_mc_version + modVersionSuffix
+	fullArtifactVersion = artifactVersion + '-mc' + project.archive_mc_version + artifactVersionSuffix
 }
 version = fullProjectVersion
 
@@ -191,7 +191,7 @@ license {
 	}
 	ext {
 		name = project.mod_name
-		author = 'Fallen_Breath'
+		author = 'As_One'
 		year = Calendar.getInstance().get(Calendar.YEAR).toString()
 	}
 }

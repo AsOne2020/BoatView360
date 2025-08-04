@@ -1,21 +1,19 @@
-## fabric-mod-template
+# BoatView360
 
-[![License](https://img.shields.io/github/license/Fallen-Breath/fabric-mod-template.svg)](http://www.gnu.org/licenses/lgpl-3.0.html)
-[![workflow](https://github.com/Fallen-Breath/fabric-mod-template/actions/workflows/gradle.yml/badge.svg)](https://github.com/Fallen-Breath/fabric-mod-template/actions/workflows/gradle.yml)
+[![License](https://img.shields.io/github/license/AsOne2020/BoatView360.svg)](http://www.gnu.org/licenses/lgpl-3.0.html)
 
-fallen's fabric mod template
+## Description
 
-If you find it helpful, a credit to this template in your project will be greatly appreciated
+BoatView360 is a Minecraft Fabric mod that removes the 210° view limit in boats, allowing full 360° camera rotation for players.
 
-## To use
+In vanilla Minecraft, players in boats have their view rotation limited to ±105 degrees, which can be inconvenient. This mod removes that restriction, allowing players to look around freely while in a boat.
 
-1. Clone / Use this template to get a new project
-2. Search `[FEATURE]` in the project, delete or uncomment those addons
-3. Setup the mod
-    - Edit java package name
-    - Edit [gradle.properties](gradle.properties) for mod id / name etc.
-    - Edit mod name in [bug_report.yml](.github/ISSUE_TEMPLATE/bug_report.yml)
-    - Edit [common.gradle](common.gradle) for mod file location constants
-    - Change the Minecraft versions in [settings.json](settings.json), [build.gradle](build.gradle), and files in the [versions](versions) folder
-    - Search `template` in the project to see if there are any missing unedited stuffs
-4. Edit [README](README.md) for the new mod
+## Features
+
+- Removes view rotation restrictions for players in boats
+- Allows full 360-degree view rotation for players in boats
+- Compatible with multiple Minecraft versions (1.14.4 - 1.21.8)
+
+## Credits
+
+This project is created based on the [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template) template.
