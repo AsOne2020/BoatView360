@@ -9,7 +9,7 @@
 
 BoatView360 is a Minecraft Fabric mod that removes the 210° view limit for passengers in boats, allowing players to have full 360° camera control while in a boat.
 
-In vanilla Minecraft, when players are sitting in boats, their view rotation is limited to ±105 degrees. This restriction can affect the gaming experience, especially when全方位 observation of the surrounding environment is needed. This mod removes this limitation, allowing players to freely look around while in a boat.
+In vanilla Minecraft, when players are sitting in boats, their view rotation is limited to ±105 degrees. This restriction can affect the gaming experience, especially when observation of the surrounding environment is needed. This mod removes this limitation, allowing players to freely look around while in a boat.
 
 ## Features
 
