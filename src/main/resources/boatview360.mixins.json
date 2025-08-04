@@ -4,11 +4,11 @@
   "package": "me.asone.boatview360.mixins",
   "plugin": "me.asone.boatview360.MixinConfigPlugin",
   "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
-  "client": [
-    "MixinBoatEntity",
-    "MixinAbstractBoatEntity"
-  ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "MixinAbstractBoatEntity",
+    "MixinBoatEntity"
+  ]
 }
