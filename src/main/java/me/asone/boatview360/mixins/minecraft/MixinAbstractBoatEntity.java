@@ -18,7 +18,7 @@
  * along with BoatView360.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.asone.boatview360.mixins;
+package me.asone.boatview360.mixins.minecraft;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
@@ -40,6 +40,6 @@ public class MixinAbstractBoatEntity {
         if (entity instanceof PlayerEntity) {
             return value;
         }
-        return MathHelper.clamp(value, -105.0F, 105.0F);
+        return MathHelper.clamp(value, min, max);
     }
 }

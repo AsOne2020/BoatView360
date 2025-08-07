@@ -18,35 +18,40 @@
  * along with BoatView360.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.asone.boatview360.mixins;
+package me.asone.boatview360.mixins.immersive_aircraft;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @SuppressWarnings("UnresolvedMixinReference")
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = "<=1.21.1"))
-@Mixin(BoatEntity.class)
-public class MixinBoatEntity {
+@Restriction(require = @Condition(value = "immersive_aircraft"))
+@Pseudo
+@Mixin(targets = "immersive_aircraft.entity.WarshipEntity")
+public class MixinWarshipEntity {
+
     @Redirect(
-            //#if MC <= 12001
-            //$$ method = "copyEntityData",
-            //#else
-            method = "clampPassengerYaw",
-            //#endif
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
+            method = "copyEntityData",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F")
     )
     private float modifyClamp(float value, float min, float max, Entity entity) {
         if (entity instanceof PlayerEntity) {
             return value;
         }
-        return MathHelper.clamp(value, -105.0F, 105.0F);
+        return MathHelper.clamp(value, min, max);
+    }
+
+    @Redirect(
+            method = "method_5773",
+            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F")
+    )
+    private float modifyClamp(float min, float max, float value) {
+        return value;
     }
 }
-
