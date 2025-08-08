@@ -38,7 +38,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinVehicleEntity {
     @Redirect(
             method = "copyEntityData",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F"),
+            remap = false
     )
     private float modifyClamp(float value, float min, float max, Entity entity) {
         if (entity instanceof PlayerEntity) {

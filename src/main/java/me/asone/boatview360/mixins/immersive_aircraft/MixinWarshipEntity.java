@@ -38,7 +38,8 @@ public class MixinWarshipEntity {
 
     @Redirect(
             method = "copyEntityData",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F"),
+            remap = false
     )
     private float modifyClamp(float value, float min, float max, Entity entity) {
         if (entity instanceof PlayerEntity) {
@@ -49,7 +50,8 @@ public class MixinWarshipEntity {
 
     @Redirect(
             method = "method_5773",
-            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F")
+            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F"),
+            remap = false
     )
     private float modifyClamp(float min, float max, float value) {
         return value;
