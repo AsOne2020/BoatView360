@@ -1,7 +1,7 @@
 plugins {
 	id 'maven-publish'
 	id 'com.github.hierynomus.license' version '0.16.1' apply false
-	id 'fabric-loom' version '1.11-SNAPSHOT' apply false
+	id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
 
 	// https://github.com/ReplayMod/preprocessor
 	// https://github.com/Fallen-Breath/preprocessor
@@ -12,14 +12,32 @@ plugins {
 }
 
 preprocess {
-	strictExtraMappings = false
+    strictExtraMappings = false
 
-	def mc114  = createNode('1.14.4', 1_14_04, '')
-	def mc1202 = createNode('1.20.2', 1_20_02, '')
-	def mc1212 = createNode('1.21.2', 1_21_02, '')
+    def mc1152_fabric  = createNode('1.15.2-fabric', 1_15_02, '')
+	def mc1171_fabric  = createNode('1.17.1-fabric', 1_17_01, '')
+    def mc1202_fabric = createNode('1.20.2-fabric', 1_20_02, '')
+	def mc1212_fabric = createNode('1.21.2-fabric', 1_21_02, '')
 
-	mc114 .link(mc1202 , null)
-	mc1202 .link(mc1212 , null)
+	def mc1152_forge  = createNode('1.15.2-forge', 1_15_02, '')
+	def mc1171_forge  = createNode('1.17.1-forge', 1_17_01, '')
+    def mc1202_forge = createNode('1.20.2-forge', 1_20_02, '')
+	def mc1212_forge = createNode('1.21.2-forge', 1_21_02, '')
+
+	def mc1206_neoforge = createNode('1.20.6-neoforge', 1_20_06, '')
+    def mc1212_neoforge = createNode('1.21.2-neoforge', 1_21_02, '')
+
+	mc1152_fabric .link(mc1171_fabric , null)
+	mc1171_fabric .link(mc1202_fabric , null)
+	mc1202_fabric .link(mc1212_fabric , null)
+
+	mc1152_fabric .link(mc1152_forge , null)
+	mc1171_fabric .link(mc1171_forge , null)
+	mc1202_fabric .link(mc1202_forge , null)
+	mc1212_fabric .link(mc1212_forge , null)
+
+	mc1202_fabric.link(mc1206_neoforge, null)
+	mc1212_fabric.link(mc1212_neoforge, null)
 }
 
 tasks.register('buildAndGather') {

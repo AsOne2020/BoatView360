@@ -183,11 +183,11 @@ jobs:
 
           files: ${{ steps.file_info.outputs.path }}
 
-          name: ${{ format('{0} v{1} for mc{2}', steps.properties_g.outputs.mod_name, steps.properties_g.outputs.mod_version, steps.properties_v.outputs.archive_mc_version) }}
-          version: ${{ format('v{1}-mc{0}', steps.properties_v.outputs.archive_mc_version, steps.properties_g.outputs.mod_version) }}
+          name: ${{ format('[{0}] {1} v{2} for mc{3}', matrix.mod_brand, steps.properties_g.outputs.mod_name, steps.properties_g.outputs.mod_version, steps.properties_v.outputs.archive_mc_version) }}
+          version: ${{ format('v{1}-mc{0}-{2}', steps.properties_v.outputs.archive_mc_version, steps.properties_g.outputs.mod_version, matrix.mod_brand) }}
           version-type: release
 
-          loaders: fabric
+          loaders: ${{ matrix.mod_brand }}
           game-versions: ${{ steps.properties_v.outputs.game_versions }}
           game-version-filter: any
           dependencies: ''  # declare the dependencies explicitly, so mc-publish won't try to load from fabric.mod.json

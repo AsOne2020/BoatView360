@@ -31,14 +31,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @SuppressWarnings("UnresolvedMixinReference")
-@Restriction(require = @Condition(value = "immersive_aircraft"))
+@Restriction(require = @Condition(value = "immersive_aircraft", versionPredicates = ">=1.0.0"))
 @Pseudo
 @Mixin(targets = "immersive_aircraft.entity.WarshipEntity")
 public class MixinWarshipEntity {
 
     @Redirect(
             method = "copyEntityData",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/class_3532;method_15363(FFF)F"),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", remap = true),
             remap = false
     )
     private float modifyClamp(float value, float min, float max, Entity entity) {
@@ -49,8 +49,14 @@ public class MixinWarshipEntity {
     }
 
     @Redirect(
+            //#if FABRIC
             method = "method_5773",
-            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F"),
+            //#elseif FORGE
+            //$$ method = "m_8119_",
+            //#else
+            //$$ method = "tick",
+            //#endif
+            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F", remap = false),
             remap = false
     )
     private float modifyClamp(float min, float max, float value) {
