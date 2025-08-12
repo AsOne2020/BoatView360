@@ -1,5 +1,10 @@
 # BoatView360
 
+[🌏 简体中文](README.md)  |  [🌐 English](README_en.md)
+
+[![Fabric](https://img.shields.io/badge/Mod%20Loader-Fabric-lightyellow)](https://fabricmc.net/)
+[![Forge](https://img.shields.io/badge/Mod%20Loader-Forge-orange)](https://files.minecraftforge.net/)
+[![NeoForge](https://img.shields.io/badge/Mod%20Loader-NeoForge-ff6600)](https://neoforged.net/)
 [![MC Versions](http://cf.way2muchnoise.eu/versions/For%20MC_BoatView360_all.svg)](https://curseforge.com/minecraft/mc-mods/BoatView360)
 [![CurseForge](http://cf.way2muchnoise.eu/full_BoatView360_downloads.svg)](https://curseforge.com/minecraft/mc-mods/BoatView360)
 [![Modrinth](https://img.shields.io/modrinth/dt/BoatView360?color=00AF5C&logo=modrinth)](https://modrinth.com/mod/BoatView360)
@@ -14,8 +19,8 @@ In vanilla Minecraft, players seating in a boat can only rotate their view withi
 
 - Removes the boat passenger rotation limit, enabling full 360° view
 - Compatible with the following mods:
-  - [Immersive Aircraft](https://www.curseforge.com/minecraft/mc-mods/immersive-aircraft)
-  - [Immersive Machinery](https://www.curseforge.com/minecraft/mc-mods/immersive-machinery)
+  - [Immersive Aircraft](https://modrinth.com/mod/immersive-aircraft) (fixed incompatibility with versions below 1.0.0)
+  - [Immersive Machinery](https://modrinth.com/mod/immersive-machinery)
 
 ## Usage
 
@@ -30,3 +35,7 @@ In vanilla Minecraft, players seating in a boat can only rotate their view withi
   - The server
 
 If any one of them is missing the mod, the 360° rotation effect will not be synchronized. Other players will still see your head rotation limited to the vanilla ±105° range.
+
+## Credits
+
+This project is based on the [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template).
