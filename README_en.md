@@ -19,7 +19,7 @@ In vanilla Minecraft, players seating in a boat can only rotate their view withi
 
 - Removes the boat passenger rotation limit, enabling full 360° view
 - Compatible with the following mods:
-  - [Immersive Aircraft](https://modrinth.com/mod/immersive-aircraft) (fixed incompatibility with versions below 1.0.0)
+  - [Immersive Aircraft](https://modrinth.com/mod/immersive-aircraft)
   - [Immersive Machinery](https://modrinth.com/mod/immersive-machinery)
 
 ## Usage
