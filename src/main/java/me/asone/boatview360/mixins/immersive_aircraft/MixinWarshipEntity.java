@@ -20,11 +20,10 @@
 
 package me.asone.boatview360.mixins.immersive_aircraft;
 
+import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,30 +35,27 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(targets = "immersive_aircraft.entity.WarshipEntity")
 public class MixinWarshipEntity {
 
-    @Redirect(
-            method = "copyEntityData",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", remap = true),
-            remap = false
-    )
-    private float modifyClamp(float value, float min, float max, Entity entity) {
-        if (entity instanceof PlayerEntity) {
-            return value;
-        }
-        return MathHelper.clamp(value, min, max);
-    }
+	@Redirect(
+			method = "copyEntityData",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", remap = true),
+			remap = false
+	)
+	private float modifyClamp(float value, float min, float max, Entity entity) {
+		return MathUtil.modifyClamp(value, min, max, entity);
+	}
 
-    @Redirect(
-            //#if FABRIC
-            method = "method_5773",
-            //#elseif FORGE
-            //$$ method = "m_8119_",
-            //#else
-            //$$ method = "tick",
-            //#endif
-            at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F", remap = false),
-            remap = false
-    )
-    private float modifyClamp(float min, float max, float value) {
-        return value;
-    }
+	@Redirect(
+			//#if FABRIC
+			method = "method_5773",
+			//#elseif FORGE
+			//$$ method = "m_8119_",
+			//#else
+			//$$ method = "tick",
+			//#endif
+			at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F", remap = false),
+			remap = false
+	)
+	private float modifyClamp(float min, float max, float value) {
+		return value;
+	}
 }

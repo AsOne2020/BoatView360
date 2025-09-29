@@ -20,14 +20,14 @@
 
 package me.asone.boatview360.mixins.minecraft;
 
+import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import org.spongepowered.asm.mixin.Mixin;
 
 //#if MC >= 12102
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 //#else
@@ -42,16 +42,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 //$$ @Mixin(targets = "net.minecraft.entity.vehicle.AbstractBoatEntity")
 //#endif
 public class MixinAbstractBoatEntity {
-    //#if MC >= 12102
-    @Redirect(
-            method = "clampPassengerYaw",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
-    )
-    private float modifyClamp(float value, float min, float max, Entity entity) {
-        if (entity instanceof PlayerEntity) {
-            return value;
-        }
-        return MathHelper.clamp(value, min, max);
-    }
-    //#endif
+	//#if MC >= 12102
+	@Redirect(
+			method = "clampPassengerYaw",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
+	)
+	private float modifyClamp(float value, float min, float max, Entity entity) {
+		return MathUtil.modifyClamp(value, min, max, entity);
+	}
+	//#endif
 }

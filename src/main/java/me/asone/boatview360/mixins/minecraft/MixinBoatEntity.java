@@ -27,8 +27,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 //#if MC <= 12101
 //$$ import net.minecraft.entity.Entity;
-//$$ import net.minecraft.entity.player.PlayerEntity;
-//$$ import net.minecraft.util.math.MathHelper;
+//$$ import me.asone.boatview360.util.MathUtil;
 //$$ import org.spongepowered.asm.mixin.injection.At;
 //$$ import org.spongepowered.asm.mixin.injection.Redirect;
 //#endif
@@ -39,21 +38,18 @@ import org.spongepowered.asm.mixin.Mixin;
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = "<=1.21.1"))
 @Mixin(BoatEntity.class)
 public class MixinBoatEntity {
-    //#if MC <= 12101
-    //$$ @Redirect(
-    //$$         //#if MC <= 12001
-    //$$         //$$ method = "copyEntityData",
-    //$$         //#else
-    //$$         method = "clampPassengerYaw",
-    //$$         //#endif
-    //$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
-    //$$ )
-    //$$ private float modifyClamp(float value, float min, float max, Entity entity) {
-    //$$     if (entity instanceof PlayerEntity) {
-    //$$         return value;
-    //$$     }
-    //$$     return MathHelper.clamp(value, min, max);
-    //$$ }
-    //#endif
+	//#if MC <= 12101
+	//$$ @Redirect(
+	//$$         //#if MC <= 12001
+	//$$         //$$ method = "copyEntityData",
+	//$$         //#else
+	//$$         method = "clampPassengerYaw",
+	//$$         //#endif
+	//$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
+	//$$ )
+	//$$ private float modifyClamp(float value, float min, float max, Entity entity) {
+	//$$ 	return MathUtil.modifyClamp(value, min, max, entity);
+	//$$ }
+	//#endif
 }
 

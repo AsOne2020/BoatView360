@@ -18,34 +18,19 @@
  * along with BoatView360.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package me.asone.boatview360;
+package me.asone.boatview360.util;
 
-import me.fallenbreath.conditionalmixin.api.mixin.RestrictiveMixinConfigPlugin;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 
-import java.util.List;
-import java.util.Set;
-
-public class MixinConfigPlugin extends RestrictiveMixinConfigPlugin {
-	private final Logger LOGGER = LogManager.getLogger();
-
-	@Override
-	protected void onRestrictionCheckFailed(String mixinClassName, String reason) {
-		LOGGER.debug("[BoatView360] Disabled mixin {} due to {}", mixinClassName, reason);
-	}
-
-	@Override
-	public String getRefMapperConfig() {
-		return null;
-	}
-
-	@Override
-	public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {
-	}
-
-	@Override
-	public List<String> getMixins() {
-		return null;
+public class MathUtil {
+	public static float modifyClamp(float value, float min, float max, Entity entity) {
+		float g = MathHelper.clamp(value, min, max);
+		if (entity instanceof PlayerEntity) {
+			if (g != value) entity.setBodyYaw(entity.getYaw(1F) - g);
+			return value;
+		}
+		return g;
 	}
 }

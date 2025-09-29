@@ -20,11 +20,10 @@
 
 package me.asone.boatview360.mixins.immersive_aircraft;
 
+import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,16 +35,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Pseudo
 @Mixin(targets = "immersive_aircraft.entity.VehicleEntity")
 public class MixinVehicleEntity {
-    @Redirect(
-            method = "copyEntityData",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F",remap = true),
-            remap = false
-    )
-    private float modifyClamp(float value, float min, float max, Entity entity) {
-        if (entity instanceof PlayerEntity) {
-            return value;
-        }
-        return MathHelper.clamp(value, min, max);
-    }
+	@Redirect(
+			method = "copyEntityData",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", remap = true),
+			remap = false
+	)
+	private float modifyClamp(float value, float min, float max, Entity entity) {
+		return MathUtil.modifyClamp(value, min, max, entity);
+	}
 
 }
