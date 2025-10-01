@@ -7,7 +7,7 @@ issueTrackerURL = "https://github.com/AsOne2020/BoatView360/issues"
 modId = "${id}"
 version = "${version}"
 displayName = "${name}"
-displayURL = "https://github.com/AsOne2020/BoatView360"
+displayURL = "https://modrinth.com/mod/BoatView360"
 authors = "As_One"
 description = '''
 Removes the 210° view limit in boats, allowing full 360° camera rotation.
