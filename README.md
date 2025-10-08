@@ -21,6 +21,7 @@
 - 兼容以下模组：
   - [Immersive Aircraft](https://modrinth.com/mod/immersive-aircraft)
   - [Immersive Machinery](https://modrinth.com/mod/immersive-machinery)
+  - [Piggybacks](https://modrinth.com/mod/piggybacks)
 
 ## 使用说明
 

@@ -21,6 +21,7 @@ In vanilla Minecraft, players seating in a boat can only rotate their view withi
 - Compatible with the following mods:
   - [Immersive Aircraft](https://modrinth.com/mod/immersive-aircraft)
   - [Immersive Machinery](https://modrinth.com/mod/immersive-machinery)
+  - [Piggybacks](https://modrinth.com/mod/piggybacks)
 
 ## Usage
 
