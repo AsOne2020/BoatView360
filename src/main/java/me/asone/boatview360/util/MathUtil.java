@@ -25,10 +25,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
 public class MathUtil {
-	public static float modifyClamp(float value, float min, float max, Entity entity) {
+	public static float modifyClamp(float value, float min, float max, Entity passenger) {
 		float g = MathHelper.clamp(value, min, max);
-		if (entity instanceof PlayerEntity) {
-			if (g != value) entity.setBodyYaw(entity.getYaw(1F) - g);
+		if (passenger instanceof PlayerEntity) {
+			if (g != value) passenger.setBodyYaw(passenger.getYaw(1F) - g);
 			return value;
 		}
 		return g;

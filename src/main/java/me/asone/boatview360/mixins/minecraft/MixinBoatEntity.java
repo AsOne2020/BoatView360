@@ -47,8 +47,8 @@ public class MixinBoatEntity {
 	//$$         //#endif
 	//$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
 	//$$ )
-	//$$ private float modifyClamp(float value, float min, float max, Entity entity) {
-	//$$ 	return MathUtil.modifyClamp(value, min, max, entity);
+	//$$ private float modifyClamp(float value, float min, float max, Entity passenger) {
+	//$$ 	return MathUtil.modifyClamp(value, min, max, passenger);
 	//$$ }
 	//#endif
 }

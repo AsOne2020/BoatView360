@@ -11,6 +11,7 @@
     "minecraft.MixinAbstractBoatEntity",
     "minecraft.MixinBoatEntity",
     "immersive_aircraft.MixinVehicleEntity",
-    "immersive_aircraft.MixinWarshipEntity"
+    "immersive_aircraft.MixinWarshipEntity",
+    "piggyback.MixinEntity"
   ]
 }
