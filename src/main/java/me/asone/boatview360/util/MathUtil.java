@@ -20,15 +20,15 @@
 
 package me.asone.boatview360.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.util.Mth;
 
 public class MathUtil {
 	public static float modifyClamp(float value, float min, float max, Entity passenger) {
-		float g = MathHelper.clamp(value, min, max);
-		if (passenger instanceof PlayerEntity) {
-			if (g != value) passenger.setBodyYaw(passenger.getYaw(1F) - g);
+		float g = Mth.clamp(value, min, max);
+		if (passenger instanceof Player) {
+				if (g != value) passenger.setYBodyRot(passenger.getViewYRot(1F) - g);
 			return value;
 		}
 		return g;

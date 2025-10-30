@@ -8,8 +8,8 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "minecraft.MixinAbstractBoatEntity",
-    "minecraft.MixinBoatEntity",
+    "minecraft.MixinAbstractBoat",
+    "minecraft.MixinBoat",
     "immersive_aircraft.MixinVehicleEntity",
     "immersive_aircraft.MixinWarshipEntity",
     "piggyback.MixinEntity"

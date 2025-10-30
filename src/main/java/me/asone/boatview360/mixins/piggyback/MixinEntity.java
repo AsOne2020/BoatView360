@@ -22,9 +22,9 @@ package me.asone.boatview360.mixins.piggyback;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -40,16 +40,16 @@ public abstract class MixinEntity {
 	public abstract boolean hasPassenger(Entity passenger);
 
 	@Inject(
-			method = "updatePassengerPosition(Lnet/minecraft/entity/Entity;)V",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;updatePassengerPosition(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/Entity$PositionUpdater;)V", shift = At.Shift.AFTER)
+			method = "Lnet/minecraft/world/entity/Entity;positionRider(Lnet/minecraft/world/entity/Entity;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", shift = At.Shift.AFTER)
 	)
 	private void updatePassengerPositionAfter1(Entity passenger, CallbackInfo ci) {
-		if (this.hasPassenger(passenger) && ((Object) this) instanceof PlayerEntity player) {
-			float bodyYaw = player.getBodyYaw();
-			float f = MathHelper.wrapDegrees(passenger.prevYaw - bodyYaw);
-			float g = MathHelper.clamp(f, -105F, 105F);
-			passenger.setYaw(passenger.prevYaw);
-			passenger.setBodyYaw(g == f ? bodyYaw : passenger.prevYaw - g);
+		if (this.hasPassenger(passenger) && ((Object) this) instanceof Player player) {
+			float bodyYaw = player.getVisualRotationYInDegrees();
+			float f = Mth.wrapDegrees(passenger.yRotO - bodyYaw);
+			float g = Mth.clamp(f, -105F, 105F);
+			passenger.setYRot(passenger.yRotO);
+			passenger.setYBodyRot(g == f ? bodyYaw : passenger.yRotO - g);
 		}
 	}
 	//#endif

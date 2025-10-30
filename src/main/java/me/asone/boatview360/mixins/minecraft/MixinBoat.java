@@ -20,35 +20,32 @@
 
 package me.asone.boatview360.mixins.minecraft;
 
-import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
+import net.minecraft.world.entity.vehicle.Boat;
 import org.spongepowered.asm.mixin.Mixin;
 
-//#if MC >= 12102
-import net.minecraft.entity.Entity;
-
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-//#else
-//$$ import org.spongepowered.asm.mixin.Pseudo;
+//#if MC <= 12101
+//$$ import net.minecraft.world.entity.Entity;
+//$$ import me.asone.boatview360.util.MathUtil;
+//$$ import org.spongepowered.asm.mixin.injection.At;
+//$$ import org.spongepowered.asm.mixin.injection.Redirect;
 //#endif
 
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.21.2"))
-//#if MC >= 12102
-@Mixin(net.minecraft.entity.vehicle.AbstractBoatEntity.class)
-//#else
-//$$ @Pseudo
-//$$ @Mixin(targets = "net.minecraft.entity.vehicle.AbstractBoatEntity")
+//#if MC <= 12101
+//$$ @SuppressWarnings("UnresolvedMixinReference")
 //#endif
-public class MixinAbstractBoatEntity {
-	//#if MC >= 12102
-	@Redirect(
-			method = "clampPassengerYaw",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
-	)
-	private float modifyClamp(float value, float min, float max, Entity passenger) {
-		return MathUtil.modifyClamp(value, min, max, passenger);
-	}
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = "<=1.21.1"))
+@Mixin(Boat.class)
+public class MixinBoat {
+	//#if MC <= 12101
+	//$$ @Redirect(
+	//$$         method = "clampRotation",
+	//$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F")
+	//$$ )
+	//$$ private float modifyClamp(float value, float min, float max, Entity passenger) {
+	//$$ 	return MathUtil.modifyClamp(value, min, max, passenger);
+	//$$ }
 	//#endif
 }
+

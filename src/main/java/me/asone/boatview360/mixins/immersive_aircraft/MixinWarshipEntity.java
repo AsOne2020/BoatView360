@@ -23,7 +23,7 @@ package me.asone.boatview360.mixins.immersive_aircraft;
 import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.entity.Entity;
+import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,7 +37,7 @@ public class MixinWarshipEntity {
 
 	@Redirect(
 			method = "copyEntityData",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F", remap = true),
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", remap = true),
 			remap = false
 	)
 	private float modifyClamp(float value, float min, float max, Entity entity) {

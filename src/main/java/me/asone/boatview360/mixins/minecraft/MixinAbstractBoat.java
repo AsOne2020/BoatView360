@@ -20,36 +20,35 @@
 
 package me.asone.boatview360.mixins.minecraft;
 
+import me.asone.boatview360.util.MathUtil;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.entity.vehicle.BoatEntity;
 import org.spongepowered.asm.mixin.Mixin;
 
-//#if MC <= 12101
-//$$ import net.minecraft.entity.Entity;
-//$$ import me.asone.boatview360.util.MathUtil;
-//$$ import org.spongepowered.asm.mixin.injection.At;
-//$$ import org.spongepowered.asm.mixin.injection.Redirect;
+//#if MC >= 12102
+import net.minecraft.world.entity.Entity;
+
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+//#else
+//$$ import org.spongepowered.asm.mixin.Pseudo;
 //#endif
 
-//#if MC <= 12101
-//$$ @SuppressWarnings("UnresolvedMixinReference")
+@Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.21.2"))
+//#if MC >= 12102
+@Mixin(net.minecraft.world.entity.vehicle.AbstractBoat.class)
+//#else
+//$$ @Pseudo
+//$$ @Mixin(targets = "net.minecraft.world.entity.vehicle.AbstractBoat")
 //#endif
-@Restriction(require = @Condition(value = "minecraft", versionPredicates = "<=1.21.1"))
-@Mixin(BoatEntity.class)
-public class MixinBoatEntity {
-	//#if MC <= 12101
-	//$$ @Redirect(
-	//$$         //#if MC <= 12001
-	//$$         //$$ method = "copyEntityData",
-	//$$         //#else
-	//$$         method = "clampPassengerYaw",
-	//$$         //#endif
-	//$$         at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(FFF)F")
-	//$$ )
-	//$$ private float modifyClamp(float value, float min, float max, Entity passenger) {
-	//$$ 	return MathUtil.modifyClamp(value, min, max, passenger);
-	//$$ }
+public class MixinAbstractBoat {
+	//#if MC >= 12102
+	@Redirect(
+			method = "clampRotation",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F")
+	)
+	private float modifyClamp(float value, float min, float max, Entity passenger) {
+		return MathUtil.modifyClamp(value, min, max, passenger);
+	}
 	//#endif
 }
-
