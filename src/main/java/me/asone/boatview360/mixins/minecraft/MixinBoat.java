@@ -22,10 +22,10 @@ package me.asone.boatview360.mixins.minecraft;
 
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.world.entity.vehicle.Boat;
 import org.spongepowered.asm.mixin.Mixin;
 
 //#if MC <= 12101
+//$$ import net.minecraft.world.entity.vehicle.Boat;
 //$$ import net.minecraft.world.entity.Entity;
 //$$ import me.asone.boatview360.util.MathUtil;
 //$$ import org.spongepowered.asm.mixin.injection.At;
@@ -36,7 +36,11 @@ import org.spongepowered.asm.mixin.Mixin;
 //$$ @SuppressWarnings("UnresolvedMixinReference")
 //#endif
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = "<=1.21.1"))
-@Mixin(Boat.class)
+//#if MC <= 12101
+//$$ @Mixin(Boat.class)
+//#else
+@Mixin(targets = "net.minecraft.world.entity.vehicle.Boat")
+//#endif
 public class MixinBoat {
 	//#if MC <= 12101
 	//$$ @Redirect(

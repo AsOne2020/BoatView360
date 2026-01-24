@@ -35,8 +35,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 //#endif
 
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.21.2"))
-//#if MC >= 12102
-@Mixin(net.minecraft.world.entity.vehicle.AbstractBoat.class)
+//#if MC >= 12111
+@Mixin(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class)
+//#elseif MC >= 12102
+//$$ @Mixin(net.minecraft.world.entity.vehicle.AbstractBoat.class)
 //#else
 //$$ @Pseudo
 //$$ @Mixin(targets = "net.minecraft.world.entity.vehicle.AbstractBoat")
