@@ -6,8 +6,6 @@ stonecutter {
 	active '26.3-fabric'
 
 	parameters {
-//		swaps.put 'mod_version', "\"${property('mod.version')}\";".toString()
-//		swaps.put 'minecraft', "\"${node.metadata.version}\";".toString()
 		def loader = node.project.name.split('-').last()
 		constants.put 'fabric', loader == 'fabric'
 		constants.put 'neoforge', loader == 'neoforge'
