@@ -29,7 +29,7 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-
+// Immersive Aircraft
 @SuppressWarnings("UnresolvedMixinReference")
 @Restriction(require = @Condition(value = "immersive_aircraft"))
 @Pseudo

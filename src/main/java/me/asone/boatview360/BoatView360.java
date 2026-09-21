@@ -20,30 +20,31 @@
 
 package me.asone.boatview360;
 
-//#if FABRIC
+//? fabric {
 import net.fabricmc.api.ModInitializer;
-//#elseif FORGE
-//$$ import net.minecraftforge.fml.common.Mod;
-//#elseif NEOFORGE
-//$$ import net.neoforged.fml.common.Mod;
-//#endif
+//?} elif forge {
+/*import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.loading.LoadingModList;
+*///?} elif neoforge {
+/*import net.neoforged.fml.common.Mod;
+*///?}
 
-//#if FORGE_LIKE
-//$$ @Mod(BoatView360.MOD_ID)
-//#endif
+//? forgelike {
+/*@Mod(BoatView360.MOD_ID)
+*///?}
 public class BoatView360
-		//#if FABRIC
+		//? fabric {
 		implements ModInitializer
-		//#endif
+		//?}
 {
 	public static final String MOD_ID = "boatview360";
 
-	//#if FABRIC
+	//? fabric {
 	@Override
 	public void onInitialize() {
 	}
-	//#elseif FORGE_LIKE
-	//$$ public BoatView360() {
-	//$$ }
-	//#endif
+	//?} elif forgelike {
+	/*public BoatView360() {
+	}
+	*///?}
 }

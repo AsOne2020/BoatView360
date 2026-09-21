@@ -39,4 +39,7 @@ If any one of them is missing the mod, the 360° rotation effect will not be syn
 
 ## Credits
 
-This project is based on the [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template).
+Thanks to the following projects:
+
+- [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template)
+- [stonecutter-template-fabric](https://github.com/stonecutter-versioning/stonecutter-template-fabric)

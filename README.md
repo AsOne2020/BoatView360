@@ -39,4 +39,7 @@
 
 ## 致谢
 
-本项目基于 [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template) 模板创建。
+感谢以下项目：
+
+- [fabric-mod-template](https://github.com/Fallen-Breath/fabric-mod-template)
+- [stonecutter-template-fabric](https://github.com/stonecutter-versioning/stonecutter-template-fabric)

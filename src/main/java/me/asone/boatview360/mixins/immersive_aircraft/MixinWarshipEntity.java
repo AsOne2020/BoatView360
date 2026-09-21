@@ -29,6 +29,7 @@ import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+// Immersive Aircraft
 @SuppressWarnings("UnresolvedMixinReference")
 @Restriction(require = @Condition(value = "immersive_aircraft", versionPredicates = ">=1.0.0"))
 @Pseudo
@@ -45,13 +46,15 @@ public class MixinWarshipEntity {
 	}
 
 	@Redirect(
-			//#if FABRIC
-			method = "method_5773",
-			//#elseif FORGE
-			//$$ method = "m_8119_",
-			//#else
-			//$$ method = "tick",
-			//#endif
+			//? if >=26.1 {
+			method = "tick",
+			//?} fabric {
+			/*method = "method_5773",
+			*///?} elif forge {
+			/*method = "m_8119_",
+			*///?} else {
+			/*method = "tick",
+			*///?}
 			at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F", remap = false),
 			remap = false
 	)

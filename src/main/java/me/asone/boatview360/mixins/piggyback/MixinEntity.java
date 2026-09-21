@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Restriction(require = @Condition(value = "piggyback"))
 @Mixin(Entity.class)
 public abstract class MixinEntity {
-	//#if MC >= 12000
+	//? if >=1.20 {
 
 	@Shadow
 	public abstract boolean hasPassenger(Entity passenger);
@@ -52,6 +52,6 @@ public abstract class MixinEntity {
 			passenger.setYBodyRot(g == f ? bodyYaw : passenger.yRotO - g);
 		}
 	}
-	//#endif
+	//?}
 
 }

@@ -1,0 +1,41 @@
+plugins {
+	id 'dev.kikugie.stonecutter'
+}
+
+stonecutter {
+	active '26.3-fabric'
+
+	parameters {
+//		swaps.put 'mod_version', "\"${property('mod.version')}\";".toString()
+//		swaps.put 'minecraft', "\"${node.metadata.version}\";".toString()
+		def loader = node.project.name.split('-').last()
+		constants.put 'fabric', loader == 'fabric'
+		constants.put 'neoforge', loader == 'neoforge'
+		constants.put 'forge', loader == 'forge'
+		constants.put 'forgelike', loader == 'neoforge' || loader == 'forge'
+
+	}
+}
+
+tasks.register('buildAndCollect') {
+	dependsOn stonecutter.tasks.named('build', Task)
+	doFirst {
+		println 'Gathering builds'
+		def buildLibs = {
+			p -> p.buildDir.toPath().resolve('libs')
+		}
+		delete fileTree(buildLibs(rootProject)) {
+			include '*'
+		}
+		subprojects {
+			copy {
+				from(buildLibs(project)) {
+					include '*.jar'
+					exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
+				}
+				into buildLibs(rootProject)
+				duplicatesStrategy = DuplicatesStrategy.INCLUDE
+			}
+		}
+	}
+}

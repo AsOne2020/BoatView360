@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "me.asone.boatview360.mixins",
   "plugin": "me.asone.boatview360.MixinConfigPlugin",
-  "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
+  "compatibilityLevel": "${java}",
   "injectors": {
     "defaultRequire": 1
   },

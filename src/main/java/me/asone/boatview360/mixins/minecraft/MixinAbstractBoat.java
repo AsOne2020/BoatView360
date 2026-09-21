@@ -25,26 +25,26 @@ import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
 import org.spongepowered.asm.mixin.Mixin;
 
-//#if MC >= 12102
+//? if >=1.21.2 {
 import net.minecraft.world.entity.Entity;
 
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-//#else
-//$$ import org.spongepowered.asm.mixin.Pseudo;
-//#endif
+//?} else {
+/*import org.spongepowered.asm.mixin.Pseudo;
+*///?}
 
 @Restriction(require = @Condition(value = "minecraft", versionPredicates = ">=1.21.2"))
-//#if MC >= 12111
+//? if >=1.21.11 {
 @Mixin(net.minecraft.world.entity.vehicle.boat.AbstractBoat.class)
-//#elseif MC >= 12102
-//$$ @Mixin(net.minecraft.world.entity.vehicle.AbstractBoat.class)
-//#else
-//$$ @Pseudo
-//$$ @Mixin(targets = "net.minecraft.world.entity.vehicle.AbstractBoat")
-//#endif
+//?} elif >=1.21.2 {
+/*@Mixin(net.minecraft.world.entity.vehicle.AbstractBoat.class)
+*///?} else {
+/*@Pseudo
+@Mixin(targets = "net.minecraft.world.entity.vehicle.AbstractBoat")
+*///?}
 public class MixinAbstractBoat {
-	//#if MC >= 12102
+	//? if >=1.21.2 {
 	@Redirect(
 			method = "clampRotation",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F")
@@ -52,5 +52,5 @@ public class MixinAbstractBoat {
 	private float modifyClamp(float value, float min, float max, Entity passenger) {
 		return MathUtil.modifyClamp(value, min, max, passenger);
 	}
-	//#endif
+	//?}
 }

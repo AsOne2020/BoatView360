@@ -1,78 +1,222 @@
-import com.replaymod.gradle.preprocess.Node
-import groovy.json.JsonSlurper
-
 plugins {
-	id 'maven-publish'
-	id 'com.github.hierynomus.license' version '0.16.1' apply false
-	id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-
-	// https://github.com/ReplayMod/preprocessor
-	// https://github.com/Fallen-Breath/preprocessor
-	id 'com.replaymod.preprocess' version 'd452ef7612'
-
-	// https://github.com/Fallen-Breath/yamlang
-	id 'me.fallenbreath.yamlang' version '1.5.0' apply false
+	id 'dev.architectury.loom-no-remap' version '1.17-SNAPSHOT' apply false
+	id 'dev.architectury.loom' version '1.17-SNAPSHOT' apply false
+	id 'com.github.hierynomus.license' version '0.16.1'
 }
 
-def linkNode(Node src, Node dst) {
-	def mappingFile = rootProject.file("versions/mapping-${src.project}-${dst.project}.txt")
-	src.link(dst, mappingFile.isFile() ? mappingFile : null)
+def parsed = sc.current.parsed
+def mcVersion = sc.current.version
+def obfuscated = parsed < '26.1'
+def loader = sc.current.project.split('-').last()
+
+def requiredJava = (
+		parsed >= '26.1' ? JavaVersion.VERSION_25 :
+				parsed >= '1.20.5' ? JavaVersion.VERSION_21 :
+						parsed >= '1.18' ? JavaVersion.VERSION_17 :
+								parsed >= '1.17' ? JavaVersion.VERSION_16 :
+										JavaVersion.VERSION_1_8
+)
+
+assert loader in ['fabric', 'neoforge', 'forge']
+
+apply plugin: obfuscated ? 'dev.architectury.loom' : 'dev.architectury.loom-no-remap'
+
+assert loader == (loom.platform.get() as String).toLowerCase()
+
+version = "v${project['mod.version']}-mc${mcVersion}-${loader}"
+
+base {
+	archivesName = project['mod.id']
 }
 
-preprocess {
-    strictExtraMappings = false
-
-	def settings = new JsonSlurper().parseText(file('settings.json').text)
-	def all_versions = new ArrayList<>(settings.versions)
-	Map<String, Node> all_nodes = [:]
-
-	for (String version : all_versions) {
-		String[] versionParts = version.split("-")[0].split("\\.")
-		if (versionParts.size() == 2) {
-			versionParts = [versionParts[0], versionParts[1], "0"]
-		}
-		int versionId = Integer.parseInt(versionParts[0]) * 10000 + Integer.parseInt(versionParts[1]) * 100 + Integer.parseInt(versionParts[2])
-		all_nodes[version] = createNode(version, versionId, '')
+repositories {
+	maven {
+		url = 'https://maven.parchmentmc.org'
 	}
-
-	Node prev_fabric_node = null
-	for (String version : all_versions) {
-		def (mc_version, mod_brand) = version.split("-")
-		def node = all_nodes[version]
-		switch (mod_brand) {
-			case "fabric":
-				if (prev_fabric_node != null) {
-					linkNode(prev_fabric_node, all_nodes[version])
-				}
-				prev_fabric_node = node
-				break
-			default:
-				linkNode(all_nodes["${mc_version}-fabric"], all_nodes[version])
-		}
+	maven {
+		url = 'https://jitpack.io'
+	}
+	maven {
+		url = 'https://maven.neoforged.net/releases'
+	}
+	maven { // conditional-mixin
+		url = 'https://maven.fallenbreath.me/releases'
 	}
 }
 
-tasks.register('buildAndGather') {
-	subprojects {
-		dependsOn project.tasks.named('build').get()
+dependencies {
+	def processDependency = { dep ->
+		// https://github.com/FabricMC/fabric-loader/issues/783
+		if (dep instanceof ModuleDependency) {
+			if (!(dep.group == 'net.fabricmc' && dep.name == 'fabric-loader')) {
+				dep.exclude group: 'net.fabricmc', module: 'fabric-loader'
+			}
+		}
+		return dep
 	}
-	doFirst {
-		println 'Gathering builds'
-		def buildLibs = {
-			p -> p.buildDir.toPath().resolve('libs')
-		}
-		delete fileTree(buildLibs(rootProject)) {
-			include '*'
-		}
-		subprojects {
-			copy {
-				from(buildLibs(project)) {
-					include '*.jar'
-					exclude '*-dev.jar', '*-sources.jar', '*-shadow.jar'
-				}
-				into buildLibs(rootProject)
-				duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	def autoImplementation = { Object... args -> processDependency(obfuscated ? modImplementation(*args) : implementation(*args)) }
+	def autoRuntimeOnly = { Object... args -> processDependency(obfuscated ? modRuntimeOnly(*args) : runtimeOnly(*args)) }
+	def autoCompileOnly = { Object... args -> processDependency(obfuscated ? modCompileOnly(*args) : compileOnly(*args)) }
+
+	minecraft "com.mojang:minecraft:${sc.current.version}"
+	if (obfuscated) {
+		mappings loom.layered() {
+			officialMojangMappings()
+			if (project['parchment_version'].size() > 0) {
+				parchment("org.parchmentmc.data:parchment-${mcVersion}:${project['parchment_version']}@zip")
 			}
 		}
 	}
+
+	if (loader == 'fabric') {
+		autoImplementation "net.fabricmc:fabric-loader:${project['deps.fabric_loader']}"
+	} else if (loader == 'forge') {
+		forge "net.minecraftforge:forge:${mcVersion}-${project['forge_version']}"
+	} else if (loader == 'neoforge') {
+		neoForge "net.neoforged:neoforge:${project['neoforge_version']}"
+	}
+
+	include(autoImplementation("me.fallenbreath:conditional-mixin-${loader}:${project['conditionalmixin_version']}"))
 }
+
+loom {
+
+	decompilerOptions.named('vineflower') {
+		options.put('mark-corresponding-synthetics', '1') // Adds names to lambdas - useful for mixins
+	}
+
+	// https://docs.fabricmc.net/develop/loom/options#runs
+	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
+	runConfigs.all {
+		ideConfigGenerated(true)
+		vmArgs commonVmArgs
+		runDir = '../../run' // Shares the run directory between versions
+	}
+
+	if (loader == 'forge') {
+		forge {
+			mixinConfigs = ['boatview360.mixins.json']
+		}
+	}
+}
+
+java {
+	withSourcesJar()
+	targetCompatibility = requiredJava
+	sourceCompatibility = requiredJava
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(Math.max(Integer.parseInt(requiredJava.majorVersion), 17))
+	}
+}
+
+// ensure that the encoding is set to UTF-8, no matter what the system default is
+// this fixes some edge cases with special characters not displaying correctly
+// see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+	if (requiredJava <= JavaVersion.VERSION_1_8) {
+		// suppressed "source/target value 8 is obsolete and will be removed in a future release"
+		options.compilerArgs << '-Xlint:-options'
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+processResources {
+	inputs.property 'id', project['mod.id']
+	inputs.property 'name', project['mod.name']
+	inputs.property 'version', project['mod.version']
+	inputs.property 'minecraft', project['mod.mc_dep']
+
+	def props = [
+			id       : project['mod.id'],
+			name     : project['mod.name'],
+			version  : project['mod.version'],
+			minecraft: project['mod.mc_dep']
+	]
+
+	def good_files = [] as Set
+	def all_files = [] as Set
+	[
+			'fabric'  : ['fabric.mod.json'],
+			'forge'   : ['META-INF', 'META-INF/mods.toml', 'pack.mcmeta'],
+			'neoforge': ['META-INF', 'META-INF/neoforge.mods.toml', 'pack.mcmeta'],
+	].forEach { brand, paths ->
+		all_files.addAll(paths)
+		if (brand == loader) {
+			good_files.addAll(paths)
+		}
+	}
+	all_files.forEach { it2 ->
+		def path = it2 as String
+		if (good_files.contains(path)) {
+			filesMatching(path) {
+				expand props
+			}
+		} else {
+			exclude path
+		}
+	}
+
+	filesMatching('*.mixins.json') {
+		if (parsed >= "1.20.5" && parsed < "1.21" && loader == 'forge') {
+			expand java: "JAVA_17"
+		} else if (parsed >= "26.1" && loader == 'forge') {
+			expand java: "JAVA_21"
+		} else {
+			expand java: "JAVA_${requiredJava.majorVersion}"
+		}
+
+	}
+
+	if (loader == 'neoforge' || loader == 'forge') {
+		// forge requires the mod icon file to be at the resource root
+		filesMatching('assets/boatview360/icon.png') { f -> f.path = new File(f.path).getName() }
+	}
+}
+
+jar {
+	inputs.property 'mod_id', project['mod.id']
+	from(rootProject.file('LICENSE')) {
+		rename { "${it}_${inputs.properties.mod_id}" }
+	}
+}
+
+// https://github.com/hierynomus/license-gradle-plugin
+license {
+	// use "gradle licenseFormat" to apply license headers
+	header = rootProject.file('HEADER.txt')
+	include '**/*.java'
+	skipExistingHeaders = true
+
+	headerDefinitions {
+		// ref: https://github.com/mathieucarbou/license-maven-plugin/blob/4c42374bb737378f5022a3a36849d5e23ac326ea/license-maven-plugin/src/main/java/com/mycila/maven/plugin/license/header/HeaderType.java#L48
+		// modification: add a newline at the end
+		SLASHSTAR_STYLE_NEWLINE {
+			firstLine = '/*'
+			beforeEachLine = ' * '
+			endLine = ' */' + System.lineSeparator()
+			afterEachLine = ''
+			skipLinePattern = null
+			firstLineDetectionPattern = '(\\s|\\t)*/\\*.*$'
+			lastLineDetectionPattern = '.*\\*/(\\s|\\t)*$'
+			allowBlankLines = false
+			isMultiline = true
+			padLines = false
+		}
+	}
+	mapping {
+		java = 'SLASHSTAR_STYLE_NEWLINE'
+	}
+	ext {
+		name = project['mod.name']
+		author = 'As_One'
+		year = Calendar.getInstance().get(Calendar.YEAR).toString()
+	}
+}
+
+classes.dependsOn licenseFormatMain
+testClasses.dependsOn licenseFormatTest
