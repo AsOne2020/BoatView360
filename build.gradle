@@ -87,10 +87,12 @@ loom {
 
 	// https://docs.fabricmc.net/develop/loom/options#runs
 	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
-	runConfigs.all {
-		ideConfigGenerated(true)
-		vmArgs commonVmArgs
-		runDir = '../../run' // Shares the run directory between versions
+	runs {
+		client {
+			ideConfigGenerated(true)
+			vmArgs commonVmArgs
+			runDir = '../../run' // Shares the run directory between versions
+		}
 	}
 
 	if (loader == 'forge') {
@@ -169,7 +171,6 @@ processResources {
 		} else {
 			expand java: "JAVA_${requiredJava.majorVersion}"
 		}
-
 	}
 
 	if (loader == 'neoforge' || loader == 'forge') {
