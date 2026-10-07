@@ -20,21 +20,23 @@
 
 package me.asone.boatview360.mixins.piggyback;
 
+import org.spongepowered.asm.mixin.Mixin;
+
+//? if >=1.20 && !(>=26.1 && forge) {
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+
 @Restriction(require = @Condition(value = "piggyback"))
 @Mixin(Entity.class)
 public abstract class MixinEntity {
-	//? if >=1.20 {
 
 	@Shadow
 	public abstract boolean hasPassenger(Entity passenger);
@@ -52,6 +54,9 @@ public abstract class MixinEntity {
 			passenger.setYBodyRot(g == f ? bodyYaw : passenger.yRotO - g);
 		}
 	}
-	//?}
 
 }
+//?} else {
+/*@Mixin(net.minecraft.client.Minecraft.class)
+public abstract class MixinEntity {}
+*///?}

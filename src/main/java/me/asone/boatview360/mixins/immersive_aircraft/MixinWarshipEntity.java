@@ -20,16 +20,18 @@
 
 package me.asone.boatview360.mixins.immersive_aircraft;
 
-import me.asone.boatview360.util.MathUtil;
+import org.spongepowered.asm.mixin.Mixin;
+
+//? if >=1.16.5 && !(>=1.20.3 && forge) {
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.world.entity.Entity;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-// Immersive Aircraft
+import net.minecraft.world.entity.Entity;
+import me.asone.boatview360.util.MathUtil;
+
 @SuppressWarnings("UnresolvedMixinReference")
 @Restriction(require = @Condition(value = "immersive_aircraft", versionPredicates = ">=1.0.0"))
 @Pseudo
@@ -48,7 +50,7 @@ public class MixinWarshipEntity {
 	@Redirect(
 			//? if >=26.1 {
 			method = "tick",
-			//?} fabric {
+			//?} elif fabric {
 			/*method = "method_5773",
 			*///?} elif forge {
 			/*method = "m_8119_",
@@ -62,3 +64,8 @@ public class MixinWarshipEntity {
 		return value;
 	}
 }
+
+//?} else {
+/*@Mixin(net.minecraft.client.Minecraft.class)
+public abstract class MixinWarshipEntity {}
+*///?}

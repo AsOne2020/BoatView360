@@ -76,7 +76,11 @@ dependencies {
 		neoForge "net.neoforged:neoforge:${project['neoforge_version']}"
 	}
 
-	include(autoImplementation("me.fallenbreath:conditional-mixin-${loader}:${project['conditionalmixin_version']}"))
+	// Mirrors the `//? if` condition in MixinConfigPlugin.java: only needed where a restricted mixin can be active
+	def usesConditionalMixin = parsed >= '1.16.5' && !(parsed >= '26.1' && loader == 'forge')
+	if (usesConditionalMixin) {
+		include(autoImplementation("me.fallenbreath:conditional-mixin-${loader}:${project['conditionalmixin_version']}"))
+	}
 }
 
 loom {
