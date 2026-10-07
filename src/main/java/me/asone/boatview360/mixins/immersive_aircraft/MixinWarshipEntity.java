@@ -20,14 +20,17 @@
 
 package me.asone.boatview360.mixins.immersive_aircraft;
 
-import me.asone.boatview360.util.MathUtil;
+import org.spongepowered.asm.mixin.Mixin;
+
+//? if >=1.16.5 && !(>=1.20.3 && forge) {
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
-import net.minecraft.world.entity.Entity;
-import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+
+import net.minecraft.world.entity.Entity;
+import me.asone.boatview360.util.MathUtil;
 
 @SuppressWarnings("UnresolvedMixinReference")
 @Restriction(require = @Condition(value = "immersive_aircraft", versionPredicates = ">=1.0.0"))
@@ -45,13 +48,15 @@ public class MixinWarshipEntity {
 	}
 
 	@Redirect(
-			//#if FABRIC
-			method = "method_5773",
-			//#elseif FORGE
-			//$$ method = "m_8119_",
-			//#else
-			//$$ method = "tick",
-			//#endif
+			//? if >=26.1 {
+			method = "tick",
+			//?} elif fabric {
+			/*method = "method_5773",
+			*///?} elif forge {
+			/*method = "m_8119_",
+			*///?} else {
+			/*method = "tick",
+			*///?}
 			at = @At(value = "INVOKE", target = "Lorg/joml/Math;clamp(FFF)F", remap = false),
 			remap = false
 	)
@@ -59,3 +64,8 @@ public class MixinWarshipEntity {
 		return value;
 	}
 }
+
+//?} else {
+/*@Mixin(net.minecraft.client.Minecraft.class)
+public abstract class MixinWarshipEntity {}
+*///?}
